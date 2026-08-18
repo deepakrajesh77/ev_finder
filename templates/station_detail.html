@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ station.name }} — VoltFinder{% endblock %}
+{% block content %}
+
+<section class="detail-page container">
+  <a href="{% url 'search_results' %}" class="back-link">← Back to results</a>
+
+  <div class="detail-grid">
+    <div class="detail-main">
+      <div class="detail-image">
+        {% if station.image %}
+          <img src="{{ station.image.url }}" alt="{{ station.name }}">
+        {% else %}
+          <div class="img-placeholder large">⚡</div>
+        {% endif %}
+      </div>
+
+      <h1>{{ station.name }}</h1>
+      <p class="station-address">📍 {{ station.address }}{% if station.district %}, {{ station.district.name }}{% endif %}</p>
+
+      {% if station.description %}
+        <p class="station-desc">{{ station.description }}</p>
+      {% endif %}
+
+      <h2 class="sub-heading">Available Connectors</h2>
+      <div class="connector-box-grid">
+        {% for c in station.connectors.all %}
+        <div class="connector-box">
+          <span class="connector-box-type">{{ c.get_connector_type_display }}</span>
+          <span class="connector-box-power">{{ c.power_kw }} kW</span>
+          <span class="connector-box-count">{{ c.count }} available</span>
+          {% if c.price_per_kwh %}<span class="connector-box-price">₹{{ c.price_per_kwh }} / kWh</span>{% endif %}
+        </div>
+        {% empty %}
+        <p>No connector details added yet.</p>
+        {% endfor %}
+      </div>
+
+      <div class="info-strip">
+        <div class="info-item">
+          <strong>Hours</strong>
+          <span>{% if station.open_24_hours %}Open 24 Hours{% else %}{{ station.opening_time|time:"g:i A" }} – {{ station.closing_time|time:"g:i A" }}{% endif %}</span>
+        </div>
+        {% if station.contact_number %}
+        <div class="info-item">
+          <strong>Contact</strong>
+          <span>{{ station.contact_number }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="detail-sidebar">
+      <div class="map-card">
+        <div id="detailMap"></div>
+        <button id="previewRouteBtn" class="btn btn-outline btn-lg full-width">🗺️ Preview Route on Map</button>
+        <button id="startNavBtn" class="btn btn-primary btn-lg full-width">🚀 Start Navigation</button>
+        <p class="nav-hint">Opens turn-by-turn GPS navigation in your phone's default maps app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+<script>
+  window.STATION = { lat: {{ station.latitude }}, lng: {{ station.longitude }}, name: "{{ station.name|escapejs }}" };
+</script>
+<script src="{% static 'js/station_map.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}VoltFinder — Find EV Charging Stations{% endblock %}</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{% url 'home' %}" class="brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name">Volt<span class="accent">Finder</span></span>
+    </a>
+    <nav class="main-nav">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'search_results' %}">Find Stations</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'owner_dashboard' %}">My Dashboard</a>
+        <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register_owner' %}" class="btn btn-primary">List Your Station</a>
+      {% endif %}
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+{% if messages %}
+<div class="container">
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <span class="brand-icon">⚡</span> <strong>VoltFinder</strong>
+      <p>Helping EV drivers find reliable charging stations, wherever the road takes them.</p>
+    </div>
+    <div class="footer-links">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'search_results' %}">Find Stations</a>
+      <a href="{% url 'register_owner' %}">List Your Station</a>
+    </div>
+    <p class="copyright">&copy; 2026 VoltFinder. Map data &copy; OpenStreetMap contributors.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

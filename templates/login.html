@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Login — VoltFinder{% endblock %}
+{% block content %}
+<section class="auth-page container">
+  <div class="auth-card">
+    <h1>Owner Login</h1>
+    <p class="auth-sub">Log in to manage your charging stations.</p>
+    <form method="post">
+      {% csrf_token %}
+      <label>Username</label>
+      <input type="text" name="username" required autofocus>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      <button type="submit" class="btn btn-primary btn-lg full-width">Login</button>
+    </form>
+    <p class="auth-switch">Don't have an owner account? <a href="{% url 'register_owner' %}">Register here</a></p>
+  </div>
+</section>
+{% endblock %}

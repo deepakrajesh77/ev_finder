@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}My Dashboard — VoltFinder{% endblock %}
+{% block content %}
+<section class="dashboard container">
+  <div class="dashboard-header">
+    <h1>My Stations</h1>
+    <a href="{% url 'add_station' %}" class="btn btn-primary">+ Add New Station</a>
+  </div>
+
+  {% if stations %}
+  <div class="dashboard-grid">
+    {% for s in stations %}
+    <div class="dash-card">
+      <div class="dash-card-top">
+        {% if s.image %}<img src="{{ s.image.url }}" alt="{{ s.name }}">{% else %}<div class="img-placeholder">⚡</div>{% endif %}
+        <span class="status-badge status-{{ s.status }}">{{ s.get_status_display }}</span>
+      </div>
+      <div class="dash-card-body">
+        <h3>{{ s.name }}</h3>
+        <p class="station-address">📍 {{ s.address }}</p>
+        <p class="muted">{{ s.connectors.count }} connector type(s)</p>
+        <div class="station-card-actions">
+          <a href="{% url 'edit_station' s.id %}" class="btn btn-outline btn-sm">Edit</a>
+          <form action="{% url 'delete_station' s.id %}" method="post" onsubmit="return confirm('Delete this station?');" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>You haven't added any stations yet.</p>
+    <a href="{% url 'add_station' %}" class="btn btn-primary">Add Your First Station</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

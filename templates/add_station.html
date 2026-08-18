@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if editing %}Edit{% else %}Add{% endif %} Station — VoltFinder{% endblock %}
+{% block content %}
+<section class="dashboard container">
+  <h1>{% if editing %}Edit Station: {{ station.name }}{% else %}Add a New Station{% endif %}</h1>
+  <p class="section-subtitle" style="margin-bottom:24px;">Click on the map to set the exact location, or search an address. New stations are reviewed by an admin before going live.</p>
+
+  <form method="post" enctype="multipart/form-data" class="station-form">
+    {% csrf_token %}
+
+    <div class="form-grid">
+      <div class="form-col">
+        <label>Station Name</label>
+        {{ form.name }}
+
+        <label>District</label>
+        {{ form.district }}
+
+        <label>Address</label>
+        {{ form.address }}
+
+        <label>Search location on map</label>
+        <input type="text" id="mapSearchInput" placeholder="Type an address to locate it on the map">
+
+        <div id="pickerMap"></div>
+        <p class="muted">Selected coordinates: <span id="coordDisplay">{% if station %}{{ station.latitude }}, {{ station.longitude }}{% else %}Not set{% endif %}</span></p>
+        {{ form.latitude }}
+        {{ form.longitude }}
+
+        <label>Station Image</label>
+        {{ form.image }}
+
+        <label>Contact Number</label>
+        {{ form.contact_number }}
+      </div>
+
+      <div class="form-col">
+        <label>Description</label>
+        {{ form.description }}
+
+        <label class="checkbox-label">{{ form.open_24_hours }} Open 24 Hours</label>
+
+        <label>Opening Time</label>
+        {{ form.opening_time }}
+        <label>Closing Time</label>
+        {{ form.closing_time }}
+
+        <h3 class="sub-heading">Connectors</h3>
+        {{ formset.management_form }}
+        <div id="connectorFormset">
+          {% for cform in formset %}
+            <div class="connector-form-row">
+              {{ cform.id }}
+              <div class="connector-form-fields">
+                <div><label>Type</label>{{ cform.connector_type }}</div>
+                <div><label>Power (kW)</label>{{ cform.power_kw }}</div>
+                <div><label>Count</label>{{ cform.count }}</div>
+                <div><label>Price/kWh</label>{{ cform.price_per_kwh }}</div>
+                {% if cform.DELETE %}<div class="delete-check"><label>{{ cform.DELETE }} Remove</label></div>{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg">{% if editing %}Save Changes{% else %}Submit Station{% endif %}</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.INITIAL_COORDS = {% if station %}{ lat: {{ station.latitude }}, lng: {{ station.longitude }} }{% else %}null{% endif %};
+</script>
+<script src="{% static 'js/add_station_map.js' %}"></script>
+{% endblock %}

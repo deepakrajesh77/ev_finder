@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Register as Station Owner — VoltFinder{% endblock %}
+{% block content %}
+<section class="auth-page container">
+  <div class="auth-card wide">
+    <h1>List Your Charging Station</h1>
+    <p class="auth-sub">Create a free owner account to add and manage your stations.</p>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <label>{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="field-error">{{ field.errors|striptags }}</p>{% endif %}
+      {% endfor %}
+      <button type="submit" class="btn btn-primary btn-lg full-width">Create Owner Account</button>
+    </form>
+    <p class="auth-switch">Already registered? <a href="{% url 'login' %}">Login here</a></p>
+  </div>
+</section>
+{% endblock %}

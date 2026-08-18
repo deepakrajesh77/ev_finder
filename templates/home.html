@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="pill">⚡ Powering Every Journey</span>
+      <h1>Find EV Charging Stations <span class="accent">Near You</span>, Instantly</h1>
+      <p>No more range anxiety. Search by your city, district, or current location and get real-time directions to the nearest available charger.</p>
+
+      <form class="search-card" action="{% url 'search_results' %}" method="get" id="heroSearchForm">
+        <div class="search-row">
+          <div class="search-field">
+            <label>Search by place</label>
+            <input type="text" name="q" id="placeInput" placeholder="Enter city, area or landmark">
+          </div>
+          <div class="search-field">
+            <label>Or choose a district</label>
+            <select name="district">
+              <option value="">All districts</option>
+              {% for d in districts %}
+                <option value="{{ d.id }}">{{ d.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="search-actions">
+          <button type="submit" class="btn btn-primary btn-lg">Search Stations</button>
+          <button type="button" id="useLocationBtn" class="btn btn-outline btn-lg">📍 Use My Current Location</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-number">{{ total_stations }}+</span>
+        <span class="stat-label">Active Charging Stations</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">24/7</span>
+        <span class="stat-label">Live Availability</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Free to Use</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why-section container">
+  <h2 class="section-title">Everything an EV Driver Needs</h2>
+  <p class="section-subtitle">Built for the day-to-day reality of electric driving — plan ahead or find a charger on the go.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <h3>Live Map Search</h3>
+      <p>Locate nearby stations on an interactive OpenStreetMap view with your current location detected automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔌</div>
+      <h3>Connector Details</h3>
+      <p>See connector types, charging speed (kW), and pricing before you even arrive at the station.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧭</div>
+      <h3>Turn-by-turn Routing</h3>
+      <p>Get an instant route and one-tap navigation to your chosen charging station.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏢</div>
+      <h3>For Station Owners</h3>
+      <p>Own a charging point? List it in minutes and reach thousands of EV drivers searching nearby.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ev-info container">
+  <div class="ev-info-grid">
+    <div class="ev-info-text">
+      <h2 class="section-title" style="text-align:left;">Why Go Electric?</h2>
+      <ul class="check-list">
+        <li>Zero tailpipe emissions — cleaner air for everyone</li>
+        <li>Lower running cost per kilometre than fuel vehicles</li>
+        <li>Minimal maintenance — fewer moving parts, less wear</li>
+        <li>Near-silent, smooth driving experience</li>
+        <li>A rapidly growing charging network you can rely on</li>
+      </ul>
+      <a href="{% url 'search_results' %}" class="btn btn-primary">Explore Charging Stations</a>
+    </div>
+    <div class="ev-info-visual">
+      <div class="ev-card">
+        <div class="ev-card-top">🚗⚡</div>
+        <p>Every EV, every connector type — CCS2, CHAdeMO, Type 2 and more, all in one place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container cta-inner">
+    <h2>Own a Charging Station?</h2>
+    <p>Join VoltFinder and put your station on the map for thousands of EV drivers to discover.</p>
+    <a href="{% url 'register_owner' %}" class="btn btn-white btn-lg">List Your Station — It's Free</a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('useLocationBtn').addEventListener('click', function() {
+  if (!navigator.geolocation) { alert('Geolocation is not supported by your browser.'); return; }
+  this.textContent = 'Locating…';
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude, lng = pos.coords.longitude;
+      window.location.href = "{% url 'search_results' %}?lat=" + lat + "&lng=" + lng;
+    },
+    () => { alert('Unable to fetch your location. Please allow location access.'); this.textContent = '📍 Use My Current Location'; }
+  );
+});
+</script>
+{% endblock %}
