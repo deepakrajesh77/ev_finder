@@ -6,7 +6,11 @@ SECRET_KEY ="6vn2vsx_fb!rmi9*%#_x)nyma**rhn3a0-&w&zr73gyho6u^@&"
 
 DEBUG=True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "evfinder.online",
+    "www.evfinder.online",
+    "ev-finder-839j.onrender.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
