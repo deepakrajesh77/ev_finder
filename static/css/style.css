@@ -263,3 +263,7 @@ a { text-decoration: none; color: inherit; }
   .station-card-img { width: 100%; height: 160px; }
   .connector-form-fields { grid-template-columns: 1fr 1fr; }
 }
+@media(max-width:450px) {
+  .connector-form-fields { grid-template-columns: 1fr; }
+  .station-card-img { height: 140px; }
+}
