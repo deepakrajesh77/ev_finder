@@ -140,6 +140,7 @@ a { text-decoration: none; color: inherit; }
   gap: 20px;
   padding-right: 6px;
   max-height: none;
+  height: auto;
   overflow-y: visible;
 }
 .results-map { position: sticky; top: 100px; }
@@ -155,6 +156,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   width: 100%;
   align-items: stretch;
+  min-height: 190px;
 }
 
 .station-card:hover {
@@ -182,6 +184,7 @@ a { text-decoration: none; color: inherit; }
   min-width: 0;
   display: flex;
   flex-direction: column;
+  min-height: 190px;
 }
 .station-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
@@ -189,7 +192,7 @@ a { text-decoration: none; color: inherit; }
 .img-placeholder { width: 100%; height: 100%; background: var(--green-100); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--green-500); min-height: 120px; }
 .img-placeholder.large { min-height: 320px; border-radius: var(--radius-lg); font-size: 4rem; }
 .distance-badge { position: absolute; bottom: 8px; left: 8px; background: var(--green-700); color: var(--white); font-size: 0.72rem; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
-.station-card-body { padding: 16px 18px; flex: 1; }
+.station-card-body { padding: 16px 18px; flex: 1; min-height: 190px; }
 .station-card-body h3 { font-size: 1.1rem; margin-bottom: 4px; }
 .station-address { color: var(--gray-600); font-size: 0.88rem; margin: 0 0 10px; }
 .connector-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
